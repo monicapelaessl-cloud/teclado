@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aula de teclado</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9f0fb;--ink:#1b2947;--card:#fff;--mut:#55627f;--line:#c5d3ea;--acc:#2c58e6;--onacc:#fff;--ok:#17844f;--bad:#cf2d45;--k0:#ffc9d6;--k1:#ffd9a8;--k2:#fff0a0;--k3:#bfeab5;--k4:#d8d2f6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1729;--ink:#e8eefc;--card:#19243d;--mut:#9fb0d3;--line:#2c3b5e;--acc:#7ea0ff;--onacc:#0f1729;--ok:#4cd08c;--bad:#ff7088;--k0:#6b2f42;--k1:#6b4a22;--k2:#6b6020;--k3:#2f5d2c;--k4:#4a4380}}
+:root[data-theme="dark"]{--bg:#0f1729;--ink:#e8eefc;--card:#19243d;--mut:#9fb0d3;--line:#2c3b5e;--acc:#7ea0ff;--onacc:#0f1729;--ok:#4cd08c;--bad:#ff7088;--k0:#6b2f42;--k1:#6b4a22;--k2:#6b6020;--k3:#2f5d2c;--k4:#4a4380}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito",system-ui,sans-serif;line-height:1.5}
+main{max-width:920px;margin:0 auto;padding:20px 14px 40px}
+h1{font-size:clamp(1.6rem,5vw,2.3rem);font-weight:900;margin:0 0 4px}
+.sub{color:var(--mut);margin:0 0 16px}
+.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.tab{font:inherit;font-weight:700;padding:9px 16px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
+.panel{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px;min-height:130px}
+.panel[hidden]{display:none}
+.text{font-size:clamp(1.15rem,3.6vw,1.6rem);font-weight:700;letter-spacing:.02em;word-break:break-word}
+.text span{padding:1px 0;border-bottom:3px solid transparent}
+.text .d{color:var(--ok)}
+.text .c{border-bottom-color:var(--acc);background:var(--k2)}
+.text .w{background:var(--bad);color:#fff}
+.stats{color:var(--mut);margin:10px 0 0;font-weight:700}
+.btn{font:inherit;font-weight:700;margin-top:10px;padding:9px 18px;border-radius:12px;border:0;background:var(--acc);color:var(--onacc);cursor:pointer}
+.q{font-size:clamp(1.1rem,3.4vw,1.5rem);font-weight:900;margin:0 0 6px}
+.fb{min-height:1.5em;font-weight:700;margin:6px 0 0}
+.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}
+#kb{display:flex;flex-direction:column;gap:4px;padding:10px;background:var(--card);border:2px solid var(--line);border-radius:16px;margin-bottom:12px}
+.row{display:flex;gap:4px}
+.key{flex:1 1 0;min-width:0;height:clamp(36px,7.5vw,52px);font:inherit;font-weight:700;font-size:clamp(.62rem,2.2vw,1rem);color:var(--ink);border:2px solid var(--line);border-bottom-width:4px;border-radius:8px;cursor:pointer;padding:0;position:relative}
+.c0{background:var(--k0)}.c1{background:var(--k1)}.c2{background:var(--k2)}.c3{background:var(--k3)}.c4{background:var(--k4)}
+.bump::after{content:"";position:absolute;left:50%;bottom:3px;width:10px;height:3px;margin-left:-5px;background:var(--ink);border-radius:2px;opacity:.6}
+.key.hit{outline:3px solid var(--acc);transform:translateY(2px)}
+.key.next{outline:4px solid var(--acc);animation:p .9s ease-in-out infinite}
+.key.bad{outline:3px solid var(--bad)}
+@keyframes p{50%{transform:scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.key.next{animation:none}}
+.key:focus-visible,.tab:focus-visible,.btn:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+#info{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px 16px}
+#info b{font-size:1.2rem}#info p{margin:2px 0 8px}
+.chip{display:inline-block;padding:3px 12px;border-radius:999px;border:2px solid var(--line);font-weight:700;font-size:.9rem}
+.legend{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px;font-size:.85rem;font-weight:700}
+.legend span{padding:2px 10px;border-radius:999px;border:2px solid var(--line)}
+</style>
+</head>
+<body>
+<main>
+<h1>Aula de teclado</h1>
+<p class="sub">Explora as teclas, treina a escrever e testa o que sabes. Podes usar o teu teclado ou clicar nas teclas do ecrã.</p>
+<p class="stats" id="tot" style="margin:-8px 0 14px">Pontos totais: 0</p>
+<div class="tabs" role="tablist">
+<button class="tab" role="tab" aria-selected="true" data-m="0">Explorar</button>
+<button class="tab" role="tab" aria-selected="false" data-m="1">Escrever</button>
+<button class="tab" role="tab" aria-selected="false" data-m="2">Desafio</button>
+</div>
+
+<section class="panel" id="p0">
+<p class="q">Carrega numa tecla para a conhecer.</p>
+<p class="sub" style="margin:0">As cores mostram que dedo usar. Os traços nas teclas F e J ajudam a encontrar a posição certa sem olhar.</p>
+<div class="legend" style="margin-top:10px"><span class="c0">Mindinhos</span><span class="c1">Anelares</span><span class="c2">Médios</span><span class="c3">Indicadores</span><span class="c4">Polegares</span></div>
+</section>
+
+<section class="panel" id="p1" hidden>
+<div class="text" id="txt" aria-live="polite"></div>
+<p class="stats" id="st"></p>
+<button class="btn" id="nt">Outro texto</button>
+</section>
+
+<section class="panel" id="p2" hidden>
+<p class="stats" id="qs" style="margin:0 0 6px"></p>
+<p class="q" id="qq"></p>
+<p class="fb" id="qf" aria-live="polite"></p>
+<button class="btn" id="qb" hidden>Jogar outra vez</button>
+</section>
+
+<div id="kb" aria-label="Teclado"></div>
+<div id="info"><b id="in">Teclado português</b><p id="id">Aqui aparece o nome e a função da tecla.</p><span class="chip" id="fi">Dedo</span></div>
+</main>
+
+<script>
+const $=s=>document.querySelector(s);
+let total=0;function addPts(n){total+=n;$("#tot").textContent="Pontos totais: "+total}
+const FN=["Mindinho esquerdo","Anelar esquerdo","Médio esquerdo","Indicador esquerdo","Polegares","Indicador direito","Médio direito","Anelar direito","Mindinho direito"];
+const cls=f=>f<=4?f:8-f;
+const L=(c,f)=>["Key"+c,c,1,f,"Letra "+c,"Escreve a letra "+c.toLowerCase()+". Com o Shift sai maiúscula."];
+const D=(n,f)=>["Digit"+n,n,1,f,"Número "+n,"Escreve o número "+n+"."];
+const P=(c,l,f,n)=>[c,l,1,f,n,"Escreve o símbolo "+l+"."];
+const S=(c,l,w,f,n,d)=>[c,l,w,f,n,d];
+const rows=[
+[S("Escape","Esc",1.4,0,"Esc (Escape)","Cancela uma ação ou fecha uma janela."),P("Backquote","\\",0,"Barra invertida"),D(1,0),D(2,1),D(3,2),D(4,3),D(5,3),D(6,5),D(7,5),D(8,6),D(9,7),D(0,8),P("Minus","'",8,"Apóstrofo"),P("Equal","«",8,"Aspas angulares"),S("Backspace","Apagar",2,8,"Backspace","Apaga a letra que está antes do cursor.")],
+[S("Tab","Tab",1.5,0,"Tab (Tabulação)","Salta vários espaços de uma vez."),L("Q",0),L("W",1),L("E",2),L("R",3),L("T",3),L("Y",5),L("U",5),L("I",6),L("O",7),L("P",8),P("BracketLeft","+",8,"Mais"),P("BracketRight","´",8,"Acento agudo")],
+[S("CapsLock","Maiús",1.8,0,"Caps Lock","Liga e desliga as letras maiúsculas."),L("A",0),L("S",1),L("D",2),L("F",3),L("G",3),L("H",5),L("J",5),L("K",6),L("L",7),["Semicolon","Ç",1,8,"Letra Ç","Escreve a letra ç."],P("Quote","º",8,"Ordinal"),P("Backslash","~",8,"Til"),S("Enter","Enter",2,8,"Enter","Muda para uma nova linha ou confirma.")],
+[S("ShiftLeft","Shift",1.4,0,"Shift","Mantém carregada para escrever maiúsculas e símbolos."),P("IntlBackslash","<",0,"Menor que"),L("Z",0),L("X",1),L("C",2),L("V",3),L("B",3),L("N",5),L("M",5),P("Comma",",",6,"Vírgula"),P("Period",".",7,"Ponto final"),P("Slash","-",8,"Hífen"),S("ShiftRight","Shift",2.2,8,"Shift","Mantém carregada para escrever maiúsculas e símbolos.")],
+[S("Space","Espaço",9,4,"Barra de espaço","Deixa um espaço entre as palavras.")]
+];
+const meta={};let mode=0;
+const kb=$("#kb");
+rows.forEach(r=>{const d=document.createElement("div");d.className="row";r.forEach(k=>{meta[k[0]]=k;const b=document.createElement("button");b.type="button";b.id="k-"+k[0];b.className="key c"+cls(k[3])+(k[0]=="KeyF"||k[0]=="KeyJ"?" bump":"");b.style.flex=k[2]+" 1 0";b.textContent=k[1];b.onclick=()=>press(k[0],virt(k[0]));d.appendChild(b)});kb.appendChild(d)});
+kb.addEventListener("mousedown",e=>e.preventDefault());
+function virt(c){return c=="Space"?" ":c=="Period"?".":c.startsWith("Key")?c[3].toLowerCase():null}
+function flash(c,k){const e=$("#k-"+c);if(!e)return;e.classList.add(k);setTimeout(()=>e.classList.remove(k),260)}
+function setInfo(n,d,f){$("#in").textContent=n;$("#id").textContent=d;const c=$("#fi");c.textContent=f==null?"":"Dedo: "+FN[f];c.style.display=f==null?"none":"";c.className="chip"+(f==null?"":" c"+cls(f))}
+function clearNext(){document.querySelectorAll(".next").forEach(e=>e.classList.remove("next"))}
+function hint(c){clearNext();const e=$("#k-"+c);if(e)e.classList.add("next");const m=meta[c];if(m)setInfo("Próxima tecla: "+m[4],m[5],m[3])}
+
+/* Explorar */
+function explore(c){const m=meta[c];if(m)setInfo(m[4],m[5],m[3]);else setInfo("Tecla não incluída","Esta tecla não está no teclado do ecrã.",null)}
+
+/* Escrever */
+const T=["o teclado serve para escrever letras e numeros.","usa todos os dedos e tenta nao olhar para as teclas.","os indicadores descansam sobre as teclas f e j.","o polegar carrega sempre na barra de espaco.","treinar um pouco todos os dias ajuda a escrever depressa."];
+let ty={t:"",p:0,e:0,s:0,done:false,last:-1};
+function code(ch){return ch==" "?"Space":ch=="."?"Period":"Key"+ch.toUpperCase()}
+function renderT(){$("#txt").innerHTML=[...ty.t].map((ch,i)=>`<span class="${i<ty.p?"d":i==ty.p?"c":""}">${ch==" "?"&nbsp;":ch}</span>`).join("");$("#st").textContent=ty.done?$("#st").textContent:"Erros: "+ty.e;if(!ty.done)hint(code(ty.t[ty.p]))}
+function newT(){let i;do{i=Math.floor(Math.random()*T.length)}while(i==ty.last);ty={t:T[i],p:0,e:0,s:0,done:false,last:i};renderT()}
+function typing(c,ch){
+  if(ty.done||!ch)return;
+  if(!ty.s)ty.s=Date.now();
+  if(ch==ty.t[ty.p]){ty.p++;if(ty.p>=ty.t.length){ty.done=true;clearNext();const min=(Date.now()-ty.s)/60000,w=Math.round(ty.t.length/5/Math.max(min,.01)),a=Math.round(100*ty.t.length/(ty.t.length+ty.e));const pts=Math.max(0,100-5*ty.e);addPts(pts);$("#st").textContent="Muito bem! Pontuação: "+pts+" de 100 ("+ty.e+" erros). "+w+" palavras por minuto, "+a+"% de precisão.";setInfo("Texto concluído","Carrega em «Outro texto» para continuar a treinar.",null);$("#txt").querySelectorAll("span").forEach(s=>{s.className="d"});return}}
+  else{ty.e++;flash(c,"bad");const cur=$("#txt").children[ty.p];cur.classList.add("w");setTimeout(()=>cur.classList.remove("w"),250)}
+  renderT();
+}
+$("#nt").onclick=newT;
+
+/* Desafio */
+const Q=[["Dá um espaço entre duas palavras.","Space"],["Muda para uma nova linha.","Enter"],["Apaga a última letra escrita.","Backspace"],["Escreve a letra F, a que tem um traço em relevo.","KeyF"],["Carrega na tecla Shift.",["ShiftLeft","ShiftRight"]],["Liga as letras maiúsculas de forma fixa.","CapsLock"],["Salta vários espaços de uma vez para a direita.","Tab"],["Escreve o número 7.","Digit7"],["Cancela uma ação.","Escape"],["Escreve a letra A com o mindinho esquerdo.","KeyA"],["Escreve um ponto final.","Period"],["Escreve a letra J com o indicador direito.","KeyJ"]];
+let qz={l:[],i:0,s:0,tr:0,end:false};
+function qStart(){qz={l:[...Q].sort(()=>Math.random()-.5).slice(0,8),i:0,s:0,tr:0,end:false};$("#qb").hidden=true;qShow();$("#qf").textContent="";$("#qf").className="fb";clearNext()}
+function qShow(){$("#qs").textContent="Pergunta "+(qz.i+1)+" de "+qz.l.length+" · Pontos: "+qz.s;$("#qq").textContent=qz.l[qz.i][0]}
+function quiz(c){
+  if(qz.end)return;const a=[].concat(qz.l[qz.i][1]),f=$("#qf");
+  if(a.includes(c)){const pts=Math.max(2,10-3*qz.tr);qz.s+=pts;addPts(pts);qz.i++;qz.tr=0;clearNext();
+    if(qz.i>=qz.l.length){qz.end=true;$("#qs").textContent="Fim do desafio";$("#qq").textContent="Fizeste "+qz.s+" pontos em "+qz.l.length*10+".";f.className="fb ok";f.textContent=qz.s>=64?"Excelente! Já dominas o teclado.":qz.s>=32?"Bom trabalho! Joga outra vez para melhorar.":"Continua a explorar as teclas e tenta de novo.";$("#qb").hidden=false}
+    else{qShow();f.className="fb ok";f.textContent="Certo! +"+pts+" pontos"}}
+  else{qz.tr++;flash(c,"bad");f.className="fb bad";f.textContent="Ainda não. Tenta outra vez.";if(qz.tr>=2)hint(a[0])}
+}
+$("#qb").onclick=qStart;
+
+/* Geral */
+function press(c,ch){flash(c,"hit");[explore,typing,quiz][mode](c,ch)}
+document.addEventListener("keydown",e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;e.preventDefault();if(e.repeat)return;press(e.code,e.key.length==1?e.key:null)});
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+  mode=+t.dataset.m;document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x==t));
+  [0,1,2].forEach(i=>$("#p"+i).hidden=i!=mode);clearNext();
+  if(mode==0)setInfo("Teclado português","Aqui aparece o nome e a função da tecla.",null);
+  if(mode==1){if(!ty.t)newT();else renderT()}
+  if(mode==2)qStart()
+});
+setInfo("Teclado português","Aqui aparece o nome e a função da tecla.",null);
+</script>
+</body>
+</html>
